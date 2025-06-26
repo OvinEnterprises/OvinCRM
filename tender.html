@@ -1,0 +1,214 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lead Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4 bg-light">
+  <h2 class="mb-4">Lead Manager Table</h2>
+  <table class="table table-bordered" id="leadTable">
+    <thead class="table-primary">
+      <tr>
+        <th>Date</th>
+        <th>S no.</th>
+        <th>Company Name</th>
+        <th>Name</th>
+        <th>Contact No.</th>
+        <th>Email Id</th>
+        <th>Note</th>
+        <th>Purpose</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="leadBody">
+      <tr>
+        <td><input type="date" class="form-control" /></td>
+        <td><input type="number" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="email" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td>
+          <select class="form-select" onchange="handleStatusChange(this)">
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+            <option>reshedule</option>
+            <option>converted</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function handleStatusChange(select) {
+      if (select.value === "converted") {
+        const row = select.closest("tr");
+        const inputs = row.querySelectorAll("input");
+        const data = Array.from(inputs).map(input => input.value);
+        data.push("converted");
+
+        // Store in localStorage
+        const existing = JSON.parse(localStorage.getItem("customers") || "[]");
+        existing.push(data);
+        localStorage.setItem("customers", JSON.stringify(existing));
+
+        alert("Lead converted and moved to Customer Table.");
+        row.remove();
+        addNewRow();
+      }
+    }
+
+    function addNewRow() {
+      const tbody = document.getElementById("leadBody");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="date" class="form-control" /></td>
+        <td><input type="number" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="email" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td><input type="text" class="form-control" /></td>
+        <td>
+          <select class="form-select" onchange="handleStatusChange(this)">
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+            <option>reshedule</option>
+            <option>converted</option>
+          </select>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+  </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lead Manager</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body class="p-4 bg-light">
+  <h2 class="mb-4">TENDER TABLE</h2>
+
+  <div class="mb-3">
+    <button class="btn btn-success" onclick="exportTableToExcel()">Export to Excel</button>
+  </div>
+
+  <table class="table table-bordered" id="tenderTable">
+    <thead class="table-primary">
+      <tr>
+        <th>Date</th>
+        <th>S no.</th>
+        <th>Company Name</th>
+        <th>Bid No.</th>
+        <th>Item Discription</th>
+        <th>Start Date</th>
+      
+        <th>End Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="leadBody">
+      <!-- One starter row -->
+      <tr>
+        <td><input type="date" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="number" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="date" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="date" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td>
+          <select class="form-select" onchange="handleStatusChange(this)">
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+        
+            <option>Complete</option>
+          </select>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function checkRowComplete(input) {
+      const row = input.closest("tr");
+      const inputs = row.querySelectorAll("input");
+      const filled = Array.from(inputs).every(inp => inp.value.trim() !== "");
+
+      if (filled && !row.classList.contains("filled")) {
+        row.classList.add("filled");
+        addNewRow(); // Add only once
+      }
+    }
+
+    function addNewRow() {
+      const tbody = document.getElementById("leadBody");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td><input type="date" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="number" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="date" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="date" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td><input type="text" class="form-control" oninput="checkRowComplete(this)" /></td>
+        <td>
+          <select class="form-select" onchange="handleStatusChange(this)">
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+            <option>reshedule</option>
+            <option>complete</option>
+          </select>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function handleStatusChange(select) {
+      const row = select.closest("tr");
+      if (select.value === "Complete") {
+        const inputs = row.querySelectorAll("input");
+        const data = Array.from(inputs).map(input => input.value);
+        data.push("Complete");
+
+        // const existing = JSON.parse(localStorage.getItem("customers") || "[]");
+        // existing.push(data);
+        // localStorage.setItem("customers", JSON.stringify(existing));
+
+        // alert("Lead moved to Customer Table");
+      }
+    }
+
+    function exportTableToExcel() {
+      const table = document.getElementById("");
+      const wb = XLSX.utils.table_to_book(table, { sheet: "Leads" });
+      XLSX.writeFile(wb, "tenderSub.xlsx");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* @import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap'); */
+*{
+  margin: 0;padding: 0;box-sizing: border-box;  
+  font-family:Arial, Helvetica, sans-serif;
+  
+}
+body{
+  overflow: hidden;
+}
+#sales{
+  margin-left: 13px;
+  font-size:20px;
+}
+#header{
+    color: rgb(87, 174, 229);
+    margin-left: 45%;
+    font-size: 1.7rem;
+  
+}
+
+#card{
+ 
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  gap: 30px;
+}
+
+#c1{
+  padding: auto;
+  text-align: center;
+  margin-right: 10px;
+}
+
+#logout{
+  display: flex;
+  float: right;
+  width: 20px;
+  height: 40px;
+  margin-right: 80px;
+  cursor: pointer;
+  text-decoration: none;
+  color:black ;
+}
+#logout i{
+  padding: 5px;
+  
+}
+
+/*Used to make page responsive*/@media (max-width:768px){
+#card{
+  flex-direction: column;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  gap: 30px;
+}
+}
