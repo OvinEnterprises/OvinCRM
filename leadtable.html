@@ -32,7 +32,7 @@
     </thead>
     <tbody id="leadBody">
       <tr>
-        <td><input type="date" class="form-control " /></td>
+        <td><input type="date" class="form-control" /></td>
         <td><input type="number" class="form-control" /></td>
         <td><input type="text" class="form-control" /></td>
         <td><input type="text" class="form-control" /></td>
@@ -59,57 +59,28 @@
 
   <script>
     function saveAllRows() {
-  const rows = document.querySelectorAll("#leadBody tr");
-  let leads = JSON.parse(localStorage.getItem("Ldtable") || "[]");
-  let customers = JSON.parse(localStorage.getItem("customers") || "[]");
-
-  rows.forEach(row => {
-    const inputs = row.querySelectorAll("input");
-    const select = row.querySelector("select");
-
-    const values = Array.from(inputs).map(input => input.value.trim());
-    const status = select.value.trim().toUpperCase(); // Ensure consistent casing
-    const allFilled = values.every(v => v !== "");
-
-    if (allFilled && status !== "") {
-      const data = [...values, status];
-
-      if (status === "CONVERTED") {
-        customers.push(data);
-        row.remove();
-      } else if (["INPROGRESS", "PENDING", "RESCHEDULE"].includes(status)) {
-        leads.push(data);
-        row.remove();
-      }
-    }
-  });
-
-  localStorage.setItem("Ldtable", JSON.stringify(leads));
-  localStorage.setItem("customers", JSON.stringify(customers));
-  alert("Data saved successfully.");
-
-  addNewRow();
-  loadLeadData();
-}
-
+      const rows = document.querySelectorAll("#leadBody tr");
+      let leads = JSON.parse(localStorage.getItem("Ldtable") || "[]");
+      let customers = JSON.parse(localStorage.getItem("customers") || "[]");
 
       rows.forEach(row => {
         const inputs = row.querySelectorAll("input");
         const select = row.querySelector("select");
 
         const values = Array.from(inputs).map(input => input.value.trim());
-        const status = select.value.trim();
+        const status = select.value.trim().toUpperCase();
         const allFilled = values.every(v => v !== "");
 
-        if (allFilled) {
+        if (allFilled && status !== "") {
           const data = [...values, status];
 
-          if (status === "converted") {
+          if (status === "CONVERTED") {
             customers.push(data);
-            row.remove();
-          } else {
+          } else if (["INPROGRESS", "PENDING", "RESCHEDULE"].includes(status)) {
             leads.push(data);
           }
+
+          row.remove(); // remove saved row
         }
       });
 
@@ -135,11 +106,11 @@
         <td><input type="text" class="form-control" /></td>
         <td>
           <select class="form-select">
-            <option value="">Select</option>
-            <option>inprogress</option>
-            <option>panding</option>
-            <option>reshedule</option>
-            <option>converted</option>
+            <option value="">SELECT</option>
+            <option>INPROGRESS</option>
+            <option>PENDING</option>
+            <option>RESCHEDULE</option>
+            <option>CONVERTED</option>
           </select>
         </td>
         <td></td>
