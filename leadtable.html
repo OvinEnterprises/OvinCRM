@@ -59,9 +59,39 @@
 
   <script>
     function saveAllRows() {
-      const rows = document.querySelectorAll("#leadBody tr");
-      let leads = JSON.parse(localStorage.getItem("Ldtable") || "[]");
-      let customers = JSON.parse(localStorage.getItem("customers") || "[]");
+  const rows = document.querySelectorAll("#leadBody tr");
+  let leads = JSON.parse(localStorage.getItem("Ldtable") || "[]");
+  let customers = JSON.parse(localStorage.getItem("customers") || "[]");
+
+  rows.forEach(row => {
+    const inputs = row.querySelectorAll("input");
+    const select = row.querySelector("select");
+
+    const values = Array.from(inputs).map(input => input.value.trim());
+    const status = select.value.trim().toUpperCase(); // Ensure consistent casing
+    const allFilled = values.every(v => v !== "");
+
+    if (allFilled && status !== "") {
+      const data = [...values, status];
+
+      if (status === "CONVERTED") {
+        customers.push(data);
+        row.remove();
+      } else if (["INPROGRESS", "PENDING", "RESCHEDULE"].includes(status)) {
+        leads.push(data);
+        row.remove();
+      }
+    }
+  });
+
+  localStorage.setItem("Ldtable", JSON.stringify(leads));
+  localStorage.setItem("customers", JSON.stringify(customers));
+  alert("Data saved successfully.");
+
+  addNewRow();
+  loadLeadData();
+}
+
 
       rows.forEach(row => {
         const inputs = row.querySelectorAll("input");
