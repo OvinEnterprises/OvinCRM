@@ -14,7 +14,6 @@
     <table class="table table-bordered" id="dataTable">
       <thead class="table-dark">
         <tr>
-          
           <th scope="col">Company Name</th>
           <th scope="col">Sales Order No.</th>
           <th scope="col">Amount</th>
@@ -25,41 +24,93 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td><input type="number" class="form-control" oninput="checkAndAddRow(this)"></td>
-          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
-          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
-          <td><input type="number" class="form-control" oninput="checkAndAddRow(this)"></td>
-          <td><input type="email" class="form-control" oninput="checkAndAddRow(this)"></td>
-          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
-          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
-      
-        </tr>
+        <!-- Table rows will be dynamically added -->
       </tbody>
     </table>
 
-    <button class="btn btn-success" onclick="exportToExcel()">Export to Excel</button>
+    <button class="btn btn-success me-2" onclick="exportToExcel()">Export to Excel</button>
+    <button class="btn btn-primary" onclick="saveData()">Save Data</button>
   </div>
 
   <script>
     function checkAndAddRow(input) {
       const row = input.closest("tr");
       const inputs = row.querySelectorAll("input");
-      const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+      const allFilled = Array.from(inputs).every(i => i.value.trim() !== "");
       const isLastRow = row === row.parentElement.lastElementChild;
+
+      saveData(); // Save on every input
 
       if (allFilled && isLastRow) {
         const newRow = row.cloneNode(true);
-        newRow.querySelectorAll("input").forEach(input => input.value = "");
+        newRow.querySelectorAll("input").forEach(input => {
+          input.value = "";
+          input.addEventListener("input", () => checkAndAddRow(input));
+        });
         row.parentElement.appendChild(newRow);
       }
+    }
+
+    function saveData() {
+      const table = document.getElementById("dataTable");
+      const rows = table.querySelectorAll("tbody tr");
+      const tableData = [];
+
+      rows.forEach(row => {
+        const inputs = row.querySelectorAll("input");
+        const rowData = Array.from(inputs).map(input => input.value.trim());
+        if (rowData.some(cell => cell !== "")) {
+          tableData.push(rowData);
+        }
+      });
+
+      localStorage.setItem("paymentData", JSON.stringify(tableData));
+    }
+
+    function loadData() {
+      const savedData = JSON.parse(localStorage.getItem("paymentData") || "[]");
+      const tbody = document.querySelector("#dataTable tbody");
+      tbody.innerHTML = ""; // Clear existing rows
+
+      savedData.forEach(rowData => {
+        const row = document.createElement("tr");
+        rowData.forEach(value => {
+          const td = document.createElement("td");
+          const input = document.createElement("input");
+          input.className = "form-control";
+          input.value = value;
+          input.addEventListener("input", () => checkAndAddRow(input));
+          td.appendChild(input);
+          row.appendChild(td);
+        });
+        tbody.appendChild(row);
+      });
+
+      // Add one empty row at the end
+      addEmptyRow();
+    }
+
+    function addEmptyRow() {
+      const tbody = document.querySelector("#dataTable tbody");
+      const row = document.createElement("tr");
+
+      for (let i = 0; i < 7; i++) {
+        const td = document.createElement("td");
+        const input = document.createElement("input");
+        input.className = "form-control";
+        input.addEventListener("input", () => checkAndAddRow(input));
+        td.appendChild(input);
+        row.appendChild(td);
+      }
+
+      tbody.appendChild(row);
     }
 
     function exportToExcel() {
       const table = document.getElementById("dataTable");
       const rows = table.querySelectorAll("tbody tr");
 
-      const data = [["S.No","Company Name","Name","Contact No.", "Email Id","note","purpose","status"]]; // Header row
+      const data = [["Company Name", "Sales Order No.", "Amount", "Advance", "Remaining", "Invoice No.", "Remark"]];
 
       rows.forEach(row => {
         const inputs = row.querySelectorAll("input");
@@ -74,6 +125,9 @@
       XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
       XLSX.writeFile(workbook, "data_export.xlsx");
     }
+
+    // On page load
+    window.onload = loadData;
   </script>
 
 </body>
