@@ -72,7 +72,7 @@
         if (allFilled) {
           const data = [...values, status];
 
-          if (status === "CONVERTED") {
+          if (status === "converted") {
             customers.push(data);
           } else {
             leads.push(data);
@@ -105,11 +105,11 @@
         <td><input type="text" class="form-control" /></td>
         <td>
           <select class="form-select">
-            <option value="">SELECT</option>
-            <option>INPROGRESS</option>
-            <option>PENDING</option>
-            <option>RESCHEDULE</option>
-            <option>CONVERTED</option>
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+            <option>reshedule</option>
+            <option>converted</option>
           </select>
         </td>
         <td></td>
@@ -157,10 +157,10 @@
           span.outerHTML = `
             <select class="form-select">
               <option value="">Select</option>
-              <option ${value === "INPROGRESS" ? "selected" : ""}>INPROGRESS</option>
-              <option ${value === "PENDING" ? "selected" : ""}>PENDING</option>
-              <option ${value === "RESCHEDULE" ? "selected" : ""}>RESCHEDULE</option>
-              <option ${value === "CONVERTED" ? "selected" : ""}>CONVERTED</option>
+              <option ${value === "inprogress" ? "selected" : ""}>inprogress</option>
+              <option ${value === "panding" ? "selected" : ""}>panding</option>
+              <option ${value === "reshedule" ? "selected" : ""}>reshedule</option>
+              <option ${value === "converted" ? "selected" : ""}>converted</option>
             </select>
           `;
         } else {
@@ -182,7 +182,7 @@
         updatedData.push(input.value);
         if (input.tagName === "SELECT") {
           input.outerHTML = `<span class="editable" data-type="select">${input.value}</span>`;
-        } else if (input.type === "DATE") {
+        } else if (input.type === "date") {
           input.outerHTML = `<span class="editable" data-type="date">${input.value}</span>`;
         } else {
           input.outerHTML = `<span class="editable">${input.value}</span>`;
