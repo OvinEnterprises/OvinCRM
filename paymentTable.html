@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dynamic Table with Export to Excel</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body class="bg-light p-5">
+
+  <div class="container">
+    <h2 class="mb-4">Payment Status</h2>
+
+    <table class="table table-bordered" id="dataTable">
+      <thead class="table-dark">
+        <tr>
+          
+          <th scope="col">Company Name</th>
+          <th scope="col">Sales Order No.</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Advance</th>
+          <th scope="col">Remaing</th>
+          <th scope="col">Invoice No.</th>
+          <th scope="col">Remark</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="number" class="form-control" oninput="checkAndAddRow(this)"></td>
+          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
+          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
+          <td><input type="number" class="form-control" oninput="checkAndAddRow(this)"></td>
+          <td><input type="email" class="form-control" oninput="checkAndAddRow(this)"></td>
+          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
+          <td><input type="text" class="form-control" oninput="checkAndAddRow(this)"></td>
+      
+        </tr>
+      </tbody>
+    </table>
+
+    <button class="btn btn-success" onclick="exportToExcel()">Export to Excel</button>
+  </div>
+
+  <script>
+    function checkAndAddRow(input) {
+      const row = input.closest("tr");
+      const inputs = row.querySelectorAll("input");
+      const allFilled = Array.from(inputs).every(input => input.value.trim() !== "");
+      const isLastRow = row === row.parentElement.lastElementChild;
+
+      if (allFilled && isLastRow) {
+        const newRow = row.cloneNode(true);
+        newRow.querySelectorAll("input").forEach(input => input.value = "");
+        row.parentElement.appendChild(newRow);
+      }
+    }
+
+    function exportToExcel() {
+      const table = document.getElementById("dataTable");
+      const rows = table.querySelectorAll("tbody tr");
+
+      const data = [["S.No","Company Name","Name","Contact No.", "Email Id","note","purpose","status"]]; // Header row
+
+      rows.forEach(row => {
+        const inputs = row.querySelectorAll("input");
+        const rowData = Array.from(inputs).map(input => input.value.trim());
+        if (rowData.some(cell => cell !== "")) {
+          data.push(rowData);
+        }
+      });
+
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+      XLSX.writeFile(workbook, "data_export.xlsx");
+    }
+  </script>
+
+</body>
+</html>
