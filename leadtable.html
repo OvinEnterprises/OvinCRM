@@ -18,16 +18,16 @@
   <table class="table table-bordered" id="leadTable">
     <thead class="table-primary">
       <tr>
-        <th>DATE</th>
-        <th>S. NO.</th>
-        <th>COMPANY NAME</th>
-        <th>NAME</th>
-        <th>CONTACT NO.</th>
-        <th>EMAIL ID</th>
-        <th>NOTE</th>
-        <th>PURPOSE</th>
-        <th>STATUS</th>
-        <th>ACTION</th>
+        <th>Date</th>
+        <th>S no.</th>
+        <th>Company Name</th>
+        <th>Name</th>
+        <th>Contact No.</th>
+        <th>Email Id</th>
+        <th>Note</th>
+        <th>Purpose</th>
+        <th>Status</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody id="leadBody">
@@ -42,11 +42,11 @@
         <td><input type="text" class="form-control" /></td>
         <td>
           <select class="form-select">
-            <option value="">SELECT</option>
-            <option>INPROGRESS</option>
-            <option>PENDING</option>
-            <option>RESCHEDULE</option>
-            <option>CONVERTED</option>
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+            <option>reshedule</option>
+            <option>converted</option>
           </select>
         </td>
         <td></td>
@@ -72,7 +72,7 @@
         if (allFilled) {
           const data = [...values, status];
 
-          if (status === "CONVERTED") {
+          if (status === "converted") {
             customers.push(data);
           } else {
             leads.push(data);
@@ -105,11 +105,11 @@
         <td><input type="text" class="form-control" /></td>
         <td>
           <select class="form-select">
-            <option value="">SELECT</option>
-            <option>IN PROGRESS</option>
-            <option>PENDING</option>
-            <option>RESCHEDULE</option>
-            <option>CONVERTED</option>
+            <option value="">Select</option>
+            <option>inprogress</option>
+            <option>panding</option>
+            <option>reshedule</option>
+            <option>converted</option>
           </select>
         </td>
         <td></td>
@@ -157,10 +157,10 @@
           span.outerHTML = `
             <select class="form-select">
               <option value="">Select</option>
-              <option ${value === "IN PROGRESS" ? "selected" : ""}>INPROGRESS</option>
-              <option ${value === "PENDING" ? "selected" : ""}>PENDING</option>
-              <option ${value === "RESCHEDULE" ? "selected" : ""}>RESCHEDULE</option>
-              <option ${value === "CONVERTED" ? "selected" : ""}>CONVERTED</option>
+              <option ${value === "inprogress" ? "selected" : ""}>inprogress</option>
+              <option ${value === "panding" ? "selected" : ""}>panding</option>
+              <option ${value === "reshedule" ? "selected" : ""}>reshedule</option>
+              <option ${value === "converted" ? "selected" : ""}>converted</option>
             </select>
           `;
         } else {
